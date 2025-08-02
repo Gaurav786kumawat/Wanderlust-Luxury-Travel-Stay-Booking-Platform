@@ -1,0 +1,242 @@
+<% layout("layouts/boilerplate") %>
+
+<style>
+  /* BOOKING CARD DESIGN */
+  .booking-card {
+    background: linear-gradient(135deg, #f9f9ff, #ffffff);
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    padding: 20px;
+    margin-bottom: 30px;
+    transition: all 0.3s ease;
+    border: 1px solid #e6e6e6;
+  }
+
+  .booking-card:hover {
+    box-shadow: 0 10px 30px rgba(0, 123, 255, 0.1);
+  }
+
+  /* IMAGE STYLING */
+  .booking-img {
+    width: 100%;
+    max-width: 160px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 15px;
+    transition: transform 1s ease;
+  }
+
+  .booking-img:hover {
+    transform: scale(1.25);
+  }
+
+  /* TEXT AND INFO */
+  .booking-info h5 {
+    font-size: 1.25rem;
+    color: #222;
+    margin-bottom: 8px;
+  }
+
+  .booking-info label {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 0;
+  }
+
+  .booking-info p {
+    margin-bottom: 10px;
+    font-size: 0.95rem;
+    color: #333;
+  }
+
+  /* STATUS BADGES */
+  .badge-paid {
+    display: inline-block;
+    background-color: #28a745;
+    color: #fff;
+    padding: 5px 14px;
+    border-radius: 30px;
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+
+  .badge-unpaid {
+    display: inline-block;
+    background-color: #dc3545;
+    color: #fff;
+    padding: 5px 14px;
+    border-radius: 30px;
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+
+  /* RESPONSIVE TWEAKS */
+  @media (max-width: 767px) {
+    .booking-img {
+      max-width: 100%;
+      height: auto;
+      margin-bottom: 15px;
+    }
+
+    .booking-info h5 {
+      text-align: center;
+    }
+
+    .booking-card {
+      text-align: center;
+    }
+  }
+
+  /* BOOKING ACTION BUTTONS */
+.booking-actions .btn {
+  width: 180px;
+  padding: 10px 20px;
+  font-weight: 600;
+  border-radius: 50px;
+  font-size: 0.95rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease-in-out;
+}
+
+/* View Details Button */
+.view-btn {
+  border: 2px solid #00bcd4;
+  background-color: #ffffff;
+  color: #00bcd4;
+  box-shadow: 0 2px 8px rgba(0, 188, 212, 0.1);
+}
+
+.view-btn:hover {
+  background-color: #00bcd4;
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(0, 188, 212, 0.3);
+  transform: translateY(-1px);
+}
+
+/* Pay Now Button */
+.pay-btn {
+  border: 2px solid #0d6efd;
+  background-color: #ffffff;
+  color: #0d6efd;
+  box-shadow: 0 2px 8px rgba(13, 110, 253, 0.1);
+}
+
+.pay-btn:hover {
+  background-color: #0d6efd;
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(13, 110, 253, 0.3);
+  transform: translateY(-1px);
+}
+
+/* Responsive Center Alignment */
+@media (max-width: 768px) {
+  .booking-actions .btn {
+    width: 100%;
+  }
+}
+
+/* Pagination of my bookings page */
+  .pagination .page-item.active .page-link {
+    background: linear-gradient(135deg, #00bcd4, #0d6efd);
+    color: white;
+    border: none;
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.3);
+  }
+
+  .pagination .page-link {
+    color: #007bff;
+    font-weight: 600;
+    border-radius: 30px;
+    margin: 0 5px;
+    border: 1px solid #dee2e6;
+    transition: all 0.3s ease;
+  }
+
+  .pagination .page-link:hover {
+    background-color: #e9f5ff;
+  }
+
+
+</style>
+
+<div class="container py-5">
+  <h2 class="mb-4 fw-bold text-primary">📦 My Bookings</h2>
+
+  <% if (bookings.length === 0) { %>
+  <p class="text-muted">
+    You haven’t booked anything yet.
+    <a href="/listings" class="text-primary"> Go to Explore</a>
+  </p>
+  <% } %> <% bookings.forEach(booking => { %>
+  <div class="booking-card row align-items-center">
+    <div class="col-md-3 text-center">
+      <img
+        src="<%= booking.listing.images[0].url %>"
+        alt="Listing"
+        class="booking-img shadow-sm"
+      />
+    </div>
+
+    <div class="col-md-6 booking-info">
+      <h5 class="fw-bold"><%= booking.listing.title %></h5>
+      <label>🧾 Booking ID:</label>
+      <p><%= booking._id.toString().slice(-6) %></p>
+
+      <label>📅 Dates:</label>
+      <p>
+        <%= booking.checkin.toDateString() %> → <%=
+        booking.checkout.toDateString() %>
+      </p>
+
+      <label>👥 Guests:</label>
+      <p><%= booking.guests %> person(s)</p>
+
+      <label>💳 Status:</label>
+      <p style="display: inline">
+        <% if (booking.paymentStatus === "paid") { %>
+        <span class="badge-paid">Paid</span>
+        <% } else { %>
+        <span class="badge-unpaid">Not Paid</span>
+        <% } %>
+      </p>
+    </div>
+
+    <div class="col-md-3 text-center mt-3 mt-md-0">
+      <h5 class="text-success mb-3">
+        ₹ <%= booking.totalPrice.toLocaleString("en-IN") %>
+      </h5>
+      <div
+        class="booking-actions d-flex flex-column flex-md-column align-items-center gap-2 mt-3"
+      >
+        <a href="/bookings/<%= booking._id %>/details" class="btn view-btn">
+          <i class="fa-solid fa-eye me-1"></i> View Details
+        </a>
+        <% if (booking.paymentStatus !== "paid") { %>
+        <a href="/bookings/<%= booking._id %>/confirm" class="btn pay-btn">
+          <i class="fa-solid fa-credit-card me-1"></i> Pay Now
+        </a>
+        <% } %>
+      </div>
+    </div>
+  </div>
+  <% }); %>
+
+
+  <% if (totalPages > 1) { %>
+  <div class="d-flex justify-content-center mt-4">
+    <nav>
+      <ul class="pagination pagination-pill">
+        <% for (let i = 1; i <= totalPages; i++) { %>
+          <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+            <a class="page-link shadow-sm" href="?page=<%= i %>"><%= i %></a>
+          </li>
+        <% } %>
+      </ul>
+    </nav>
+  </div>
+<% } %>
+
+</div>

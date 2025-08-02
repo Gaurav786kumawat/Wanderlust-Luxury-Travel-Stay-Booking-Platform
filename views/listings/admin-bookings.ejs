@@ -1,0 +1,94 @@
+<% layout("layouts/boilerplate") %>
+
+<style>
+  .admin-table {
+    background: white;
+    border-radius: 1rem;
+    overflow-x: auto;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  }
+
+  .admin-table th {
+    background: linear-gradient(90deg, #007cf0, #00dfd8);
+    color: white;
+    font-weight: 600;
+    text-align: center;
+  }
+
+  .admin-table td {
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  .status-paid {
+    color: green;
+    font-weight: 700;
+  }
+
+  .status-unpaid {
+    color: red;
+    font-weight: 700;
+  }
+
+  .username-highlight {
+    font-weight: 600;
+    color: #007cf0;
+  }
+
+  .listing-title {
+    font-weight: 600;
+    color: #111;
+  }
+
+  .table-responsive {
+    overflow-x: auto;
+  }
+</style>
+
+<div class="container py-5">
+  <h2 class="mb-4 fw-bold text-primary">🛡️ Admin • All Bookings</h2>
+
+  <% if (bookings.length === 0) { %>
+    <p class="text-muted">No bookings found.</p>
+  <% } else { %>
+    <div class="table-responsive admin-table">
+      <table class="table table-bordered table-hover align-middle">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Listing</th>
+            <th>User</th>
+            <th>Guests</th>
+            <th>Dates</th>
+            <th>Total ₹</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% bookings.forEach((b, idx) => { %>
+            <tr>
+              <td><%= idx + 1 %></td>
+              <td class="listing-title"><%= b.listing?.title || "N/A" %></td>
+              <td class="username-highlight"><%= b.user?.username || "Unknown" %></td>
+              <td><%= b.guests %></td>
+              <td>
+                <%= b.checkin.toDateString() %> → <%= b.checkout.toDateString() %>
+              </td>
+              <td>₹ <%= b.totalPrice.toLocaleString("en-IN") %></td>
+              <td>
+                <% if (b.paymentStatus === "paid") { %>
+                  <span class="status-paid">Paid</span>
+                <% } else { %>
+                  <span class="status-unpaid">Not Paid</span>
+                <% } %>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  <% } %>
+</div>
+
+
+

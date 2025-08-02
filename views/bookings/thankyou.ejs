@@ -1,0 +1,185 @@
+<% layout("layouts/boilerplate") %>
+
+<style>
+  /* === LUXURY THANK YOU PAGE STYLES === */
+  .thankyou-card {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-radius: 2rem;
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+    padding: 3rem 2rem;
+    animation: fadeSlideIn 0.7s ease-out forwards;
+  }
+
+  .thankyou-heading {
+    font-size: 2.5rem;
+    font-weight: 800;
+    background: linear-gradient(90deg, #00c6ff, #0072ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .thankyou-subtext {
+    font-size: 1.1rem;
+    color: #444;
+  }
+
+  .booking-summary {
+    margin-top: 2rem;
+    border-radius: 1rem;
+    overflow: hidden;
+    background-color: #f1f5f9;
+    box-shadow: inset 0 1px 1px rgba(0,0,0,0.05);
+  }
+
+  .booking-summary .list-group-item {
+    background-color: #f9fafc;
+    font-size: 1rem;
+    padding: 0.85rem 1.2rem;
+    font-weight: 500;
+    color: #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: none;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .booking-summary .list-group-item:last-child {
+    border-bottom: none;
+  }
+
+  .thankyou-actions {
+    margin-top: 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: space-between;
+  }
+
+  .btn-outline-dark,
+  .btn-primary {
+    padding: 0.75rem 2rem;
+    font-weight: 600;
+    font-size: 1rem;
+    border-radius: 50px;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .btn-outline-dark:hover {
+    background-color: #111;
+    color: white;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, #007cf0, #00dfd8);
+    border: none;
+  }
+
+  .btn-primary:hover {
+    background: linear-gradient(135deg, #005dc5, #00bdb1);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(0, 124, 240, 0.3);
+  }
+
+  @keyframes fadeSlideIn {
+    from {
+      opacity: 0;
+      transform: translateY(40px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Responsive tweaks */
+  @media (max-width: 768px) {
+    .thankyou-heading {
+      font-size: 2rem;
+    }
+
+    .thankyou-card {
+      padding: 2rem 1.5rem;
+    }
+
+    .thankyou-actions {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .btn-outline-dark,
+    .btn-primary {
+      width: 100%;
+      text-align: center;
+    }
+  }
+
+  
+</style>
+
+</style>
+
+<div class="container py-5">
+  <div class="mx-auto shadow p-5 rounded-4" style="max-width: 700px; background: #f8f9ff;">
+    <div class="text-center mb-4">
+      <h1 class="fw-bold text-primary display-5">🎉 Payment Successful!</h1>
+      <p class="fs-5">Thank you Mr./Mrs. <strong><%= booking.user.username.toUpperCase() %></strong> for booking <strong><%= booking.listing.title %></strong> with Wanderlust!</p>
+    </div>
+
+    <hr class="my-4" />
+
+    <!-- 🧾 Booking Summary -->
+    <h4 class="mb-3">🧾 Booking Summary</h4>
+    <ul class="list-group list-group-flush mb-4">
+      <li class="list-group-item d-flex justify-content-between">
+        <span>🏠 Property:</span>
+        <strong><%= booking.listing.title %></strong>
+      </li>
+      <li class="list-group-item d-flex justify-content-between">
+        <span>📅 Check-in:</span>
+        <strong><%= booking.checkin.toDateString() %></strong>
+      </li>
+      <li class="list-group-item d-flex justify-content-between">
+        <span>📅 Check-out:</span>
+        <strong><%= booking.checkout.toDateString() %></strong>
+      </li>
+      <li class="list-group-item d-flex justify-content-between">
+        <span>👥 Guests:</span>
+        <strong><%= booking.guests %></strong>
+      </li>
+      <li class="list-group-item d-flex justify-content-between">
+        <span>💳 Amount Paid:</span>
+        <strong>₹<%= booking.totalPrice.toLocaleString("en-IN") %></strong>
+      </li>
+      <li class="list-group-item d-flex justify-content-between">
+        <span>🧾 Booking ID:</span>
+        <strong><%= booking._id.toString().slice(-6) %></strong>
+      </li>
+      <li class="list-group-item d-flex justify-content-between">
+        <span>📅 Payment Date:</span>
+        <strong><%= booking.paymentDate?.toDateString() || "—" %></strong>
+      </li>
+    </ul>
+
+    <!-- 👤 Owner Contact -->
+    <h5 class="mb-2">👤 Host Contact</h5>
+    <p class="mb-4">
+      For any questions, feel free to contact the host:
+      <br />
+      📧 <strong><%= booking.listing.owner.email %></strong>
+    </p>
+
+    <!-- Actions -->
+    <div class="d-flex justify-content-between">
+      <a href="/listings/<%= booking.listing._id %>" class="btn btn-outline-dark">
+        🔙 Back to Listing
+      </a>
+      <a href="/bookings/<%= booking._id %>/invoice" class="btn btn-primary">
+        📄 Download Invoice
+      </a>
+    </div>
+  </div>
+</div>

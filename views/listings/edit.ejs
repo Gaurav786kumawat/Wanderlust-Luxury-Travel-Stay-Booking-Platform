@@ -1,0 +1,505 @@
+<% layout("/layouts/boilerplate") %>
+
+<style>
+  /* 🌐 Base Font & Background */
+  body {
+    background: linear-gradient(135deg, #e0eafc, #cfdef3);
+    font-family: "Poppins", sans-serif;
+    color: #2c3e50;
+  }
+
+  /* 🔲 Card Styling */
+  .card {
+    background: rgba(255, 255, 255, 0.25);
+    border: none;
+    border-radius: 2rem;
+    backdrop-filter: blur(15px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    animation: fadeInUp 0.6s ease;
+  }
+
+  /* 🧾 Form Headings */
+  .card h3 {
+    font-size: 2rem;
+    background: linear-gradient(to right, #667eea, #764ba2);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 700;
+  }
+
+  /* ✏️ Input Fields */
+  .form-control {
+    background: rgba(255, 255, 255, 0.55);
+    border: none;
+    border-radius: 1rem;
+    padding: 0.8rem 1rem;
+    box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.05);
+    transition: 0.3s ease;
+  }
+
+  .form-control:focus {
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(118, 75, 162, 0.3);
+    border: none;
+  }
+
+  /* 🖼️ Image Preview */
+  img {
+    max-width: 100%;
+    border-radius: 1rem;
+    margin-top: 0.5rem;
+    border: 2px solid rgba(0, 0, 0, 0.1);
+  }
+
+  /* 🔘 Submit Button */
+  .submitBtn {
+    background: linear-gradient(to right, #667eea, #764ba2);
+    color: #fff;
+    font-weight: 600;
+    box-shadow: 0 6px 20px rgba(118, 75, 162, 0.3);
+    transition: all 0.3s ease;
+    border: none;
+  }
+
+  .submitBtn:hover {
+    background: linear-gradient(to right, #5a67d8, #6b46c1);
+    transform: scale(1.03);
+  }
+
+  /* ◀️ Back Button */
+  .btn-outline-secondary {
+    border-color: #667eea;
+    color: #667eea;
+    transition: all 0.3s ease;
+  }
+
+  .btn-outline-secondary:hover {
+    background-color: #667eea;
+    color: #fff;
+  }
+
+  /* ✅ Valid & Invalid Feedback */
+  .valid-feedback,
+  .invalid-feedback {
+    font-size: 0.85rem;
+    margin-top: 0.25rem;
+  }
+
+  /* 🔄 Animation */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(40px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* 📱 Responsive Padding */
+  @media (max-width: 768px) {
+    .card {
+      padding: 1.5rem;
+    }
+  }
+
+  /* 🖼️ Blur Preview Styling Only for Upload Preview */
+  #previewContainer img {
+    height: 120px;
+    object-fit: cover;
+    border-radius: 1rem;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    filter: blur(5px);
+    transition: filter 0.3s ease, transform 0.3s ease;
+  }
+
+  #previewContainer img:hover {
+    filter: blur(0);
+    transform: scale(1.03);
+  }
+
+  .toast-notify {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: #ef4444;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    font-weight: 600;
+    font-size: 0.95rem;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    opacity: 0;
+    transform: translateY(20px);
+    pointer-events: none;
+    transition: all 0.4s ease;
+  }
+
+  .toast-notify.show {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .toast-notify.hidden {
+    display: none;
+  }
+  .carousel-control-prev-icon,
+  .carousel-control-next-icon {
+    background-color: #000;
+    padding: 10px;
+    border-radius: 50%;
+  }
+
+  .carousel .carousel-item {
+    transition: transform 0.5s ease, opacity 0.5s ease;
+  }
+  /* 🎠 Carousel Controls Premium Look */
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  background-color: rgba(0, 0, 0, 0.75); /* semi-transparent black */
+  padding: 1.2rem;
+  border-radius: 50%;
+  background-size: 60% 60%;
+  background-position: center;
+  background-repeat: no-repeat;
+  transition: all 0.3s ease-in-out;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
+}
+
+.carousel-control-prev-icon:hover,
+.carousel-control-next-icon:hover {
+  background-color: #667eea; /* match your primary gradient color */
+  transform: scale(1.1);
+  filter: drop-shadow(0 0 10px #667eea);
+}
+
+/* 🖼️ Carousel Image Styling */
+.carousel-item img {
+  border-radius: 1.2rem;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  max-height: 320px;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.carousel-item img:hover {
+  transform: scale(1.02);
+}
+
+/* 📱 Mobile Optimization */
+@media (max-width: 768px) {
+  .carousel-control-prev-icon,
+  .carousel-control-next-icon {
+    padding: 1rem;
+  }
+
+  .carousel-item img {
+    max-height: 250px;
+  }
+}
+.carousel-indicators [data-bs-target] {
+  background-color: #764ba2;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  opacity: 0.5;
+}
+
+.carousel-indicators .active {
+  opacity: 1;
+  width: 14px;
+  height: 14px;
+  background-color: #667eea;
+}
+
+
+
+</style>
+
+<link rel="stylesheet" href="/styles/updateListing.css" />
+<link
+  href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
+  rel="stylesheet"
+/>
+
+<!-- 📣 Custom Toast -->
+<div id="customToast" class="toast-notify hidden">
+  <i class="fa-solid fa-triangle-exclamation me-2"></i> Max 5 images allowed.
+</div>
+
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-md-10 col-lg-8">
+      <div class="card shadow-sm border-2 rounded-4 p-4">
+        <h3 class="text-center mb-4 fw-bold">Update Listing</h3>
+
+        <form
+          action="/listings/<%= listing._id %>?_method=PUT"
+          method="POST"
+          class="needs-validation"
+          enctype="multipart/form-data"
+          novalidate
+        >
+          <!-- Title -->
+          <div class="mb-3">
+            <label for="title" class="form-label">Title</label>
+            <input
+              type="text"
+              class="form-control"
+              id="title"
+              name="listing[title]"
+              value="<%= listing.title %>"
+              required
+            />
+            <div class="invalid-feedback">Please enter a title.</div>
+          </div>
+
+          <!-- Description -->
+          <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea
+              class="form-control"
+              id="description"
+              name="listing[description]"
+              rows="3"
+              required
+            >
+<%= listing.description %></textarea
+            >
+            <div class="invalid-feedback">Please enter a description.</div>
+          </div>
+
+          <!-- Existing Images Grid with Delete + Thumbnail -->
+          <!-- 🎠 Carousel for Existing Images -->
+          <% if (listing.images && listing.images.length > 0) { %>
+          <div class="mb-5">
+            <label class="form-label fw-semibold">Current Images</label>
+
+            <div
+              id="existingImagesCarousel"
+              class="carousel slide"
+              data-bs-ride="carousel"
+            >
+              <div class="carousel-inner">
+                <% listing.images.forEach((img, idx) => { %>
+                <div class="carousel-item <%= idx === 0 ? 'active' : '' %>">
+                  <div class="d-flex flex-column align-items-center">
+                    <img
+                      src="<%= img.url %>"
+                      class="img-fluid shadow rounded"
+                      style="height: 300px; object-fit: cover; max-width: 100%"
+                      alt="Current Image"
+                    />
+
+                    <!-- ❌ Delete -->
+                    <div class="form-check mt-3">
+                      <input
+                        class="form-check-input"
+                        type="checkbox"
+                        name="deleteImages[]"
+                        value="<%= img.filename %>"
+                        id="delete<%= idx %>"
+                      />
+                      <label
+                        class="form-check-label text-danger"
+                        for="delete<%= idx %>"
+                      >
+                        Delete
+                      </label>
+                    </div>
+
+                    <!-- 🌟 Thumbnail -->
+                    <div class="form-check mt-2">
+                      <input class="form-check-input" type="radio"
+                      name="thumbnail" value="<%= img.filename %>" id="thumb<%=
+                      idx %>" <%= listing.thumbnail === img.filename ? 'checked'
+                      : '' %> />
+                      <label
+                        class="form-check-label text-muted"
+                        for="thumb<%= idx %>"
+                      >
+                        Set as Thumbnail
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <% }) %>
+              </div>
+
+              <% if (listing.images.length > 1) { %>
+              <!-- Controls -->
+              <button
+                class="carousel-control-prev"
+                type="button"
+                data-bs-target="#existingImagesCarousel"
+                data-bs-slide="prev"
+              >
+                <span
+                  class="carousel-control-prev-icon bg-dark rounded-circle"
+                  aria-hidden="true"
+                ></span>
+                <span class="visually-hidden">Previous</span>
+              </button>
+              <button
+                class="carousel-control-next"
+                type="button"
+                data-bs-target="#existingImagesCarousel"
+                data-bs-slide="next"
+              >
+                <span
+                  class="carousel-control-next-icon bg-dark rounded-circle"
+                  aria-hidden="true"
+                ></span>
+                <span class="visually-hidden">Next</span>
+              </button>
+              <% } %>
+            </div>
+          </div>
+          <% } %>
+
+          <div class="carousel-indicators">
+            <% listing.images.forEach((_, idx) => { %>
+            <button
+              type="button"
+              data-bs-target="#existingImagesCarousel"
+              data-bs-slide-to="<%= idx %>"
+              class="<%= idx === 0 ? 'active' : '' %>"
+              aria-current="<%= idx === 0 ? 'true' : 'false' %>"
+              aria-label="Slide <%= idx + 1 %>"
+            ></button>
+            <% }) %>
+          </div>
+
+          <!-- Upload New Images -->
+          <div class="mb-4">
+            <label for="imageUpload" class="form-label fw-semibold"
+              >Upload New Images</label
+            >
+            <input
+              class="form-control"
+              type="file"
+              name="listing[images]"
+              id="imageUpload"
+              multiple
+              accept="image/*"
+            />
+            <small class="text-muted"
+              >Hold Ctrl (⌘) to select multiple files.</small
+            >
+            <div
+              id="previewContainer"
+              class="d-flex flex-wrap gap-3 mt-3"
+            ></div>
+          </div>
+
+          <!-- Price -->
+          <div class="mb-3">
+            <label for="price" class="form-label">Price (₹)</label>
+            <input
+              type="number"
+              class="form-control"
+              id="price"
+              name="listing[price]"
+              value="<%= listing.price %>"
+              min="1"
+              required
+            />
+            <div class="invalid-feedback">Please enter a valid price.</div>
+          </div>
+
+          <!-- Location -->
+          <div class="mb-3">
+            <label for="location" class="form-label">Location</label>
+            <input
+              type="text"
+              class="form-control"
+              id="location"
+              name="listing[location]"
+              value="<%= listing.location %>"
+              required
+            />
+            <div class="invalid-feedback">Please enter a location.</div>
+          </div>
+
+          <!-- Country -->
+          <div class="mb-4">
+            <label for="country" class="form-label">Country</label>
+            <input
+              type="text"
+              class="form-control"
+              id="country"
+              name="listing[country]"
+              value="<%= listing.country %>"
+              required
+            />
+            <div class="invalid-feedback">Please enter a country.</div>
+          </div>
+
+          <!-- Buttons -->
+          <div class="d-flex justify-content-between align-items-center mt-4">
+            <a
+              href="/listings/<%= listing._id %>"
+              class="btn btn-outline-secondary rounded-pill px-4"
+              >← Back</a
+            >
+            <button type="submit" class="btn btn-primary rounded-pill px-4">
+              Update
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Image Preview Script -->
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const multiImageInput = document.getElementById("imageUpload");
+    const previewContainer = document.getElementById("previewContainer");
+
+    if (multiImageInput && previewContainer) {
+      multiImageInput.addEventListener("change", function () {
+        previewContainer.innerHTML = "";
+
+        const files = Array.from(this.files);
+        const maxFiles = 5;
+
+        if (files.length > maxFiles) {
+          showToast("You can upload max 5 images only!");
+          this.value = "";
+          return;
+        }
+
+        files.forEach((file) => {
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            const img = document.createElement("img");
+            img.src = e.target.result;
+            previewContainer.appendChild(img);
+          };
+          reader.readAsDataURL(file);
+        });
+      });
+    }
+  });
+  function showToast(message) {
+    const toast = document.getElementById("customToast");
+    toast.textContent = message;
+    toast.classList.remove("hidden");
+    toast.classList.add("show");
+
+    setTimeout(() => {
+      toast.classList.remove("show");
+      toast.classList.add("hidden");
+    }, 3000);
+  }
+</script>
+
+<script src="/js/script.js"></script>

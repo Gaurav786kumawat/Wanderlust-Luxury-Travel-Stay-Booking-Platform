@@ -1,0 +1,134 @@
+<% layout("layouts/boilerplate") %>
+
+<style>
+  .admin-table {
+    background-color: #ffffff;
+    border-radius: 1rem;
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.08);
+    overflow-x: auto;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .admin-table table {
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+
+  .admin-table th {
+    background: linear-gradient(90deg, #ff4b2b, #ff416c);
+    color: white;
+    font-weight: 600;
+    text-align: center;
+    padding: 1rem;
+    font-size: 1rem;
+    border-top: none;
+    border-bottom: none;
+  }
+
+  .admin-table td {
+    padding: 0.75rem 1rem;
+    vertical-align: middle;
+    text-align: center;
+    font-size: 0.95rem;
+    color: #444;
+    background-color: #fafafa;
+    border-bottom: 1px solid #eee;
+    word-break: break-word;
+    transition: background 0.3s;
+  }
+
+  .admin-table tr:hover td {
+    background-color: #f1f9ff;
+  }
+
+  .username-highlight {
+    font-weight: 600;
+    color: #007cf0;
+  }
+
+  .email-link {
+    color: #222;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .email-link:hover {
+    color: #007cf0;
+    text-decoration: underline;
+  }
+
+  .message-box {
+    max-width: 300px;
+    white-space: normal;
+    text-align: left;
+  }
+
+  .admin-heading {
+    font-weight: 700;
+    font-size: 2rem;
+    color: #ff416c;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .admin-heading i {
+    font-size: 1.7rem;
+  }
+
+  .table-responsive {
+    overflow-x: auto;
+    border-radius: 1rem;
+  }
+</style>
+
+
+<div class="container py-5">
+  <h2 class="mb-4 fw-bold text-danger">📬 Admin • All Contact Messages</h2>
+
+  <% if (contacts.length === 0) { %>
+    <p class="text-muted">No contact submissions yet.</p>
+  <% } else { %>
+    <div class="table-responsive admin-table">
+      <table class="table table-bordered table-hover align-middle">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Subject</th>
+            <th>Message</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% contacts.forEach((c, idx) => { %>
+            <tr>
+              <td><%= idx + 1 %></td>
+              <td class="username-highlight"><%= c.name %></td>
+              <td>
+                <a href="mailto:<%= c.email %>" class="email-link"><%= c.email %></a>
+              </td>
+              <td><%= c.subject %></td>
+              <td class="message-box"><%= c.message %></td>
+              <td><%= c.createdAt.toLocaleDateString("en-IN") %></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="d-flex justify-content-center mt-4">
+      <nav>
+        <ul class="pagination pagination-pill">
+          <% for (let i = 1; i <= totalPages; i++) { %>
+          <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+            <a class="page-link shadow-sm" href="?page=<%= i %>"><%= i %></a>
+          </li>
+          <% } %>
+        </ul>
+      </nav>
+    </div>
+  <% } %>
+</div>

@@ -1,0 +1,90 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="container my-5">
+  <div class="card shadow-lg rounded-4 border-0">
+    <div class="card-body p-5">
+
+      <!-- Heading -->
+      <h2 class="mb-4 fw-bold text-primary">
+        <i class="fa-solid fa-circle-info me-2"></i>Booking Details
+      </h2>
+
+      <!-- Booking Meta -->
+      <div class="row mb-4">
+        <div class="col-md-6 mb-3">
+          <h5 class="fw-bold">Booking ID</h5>
+          <p class="text-muted"><%= booking._id %></p>
+        </div>
+        <div class="col-md-6 mb-3">
+          <h5 class="fw-bold">Payment Status</h5>
+          <span class="badge bg-success text-uppercase px-3 py-2"><%= booking.paymentStatus %></span>
+        </div>
+      </div>
+
+      <!-- User Info -->
+      <div class="row mb-4">
+        <div class="col-md-6 mb-3">
+          <h5 class="fw-bold">Booked By</h5>
+          <p><i class="fa-solid fa-user me-1"></i> <%= booking.user.username %></p>
+          <p><i class="fa-solid fa-envelope me-1"></i> <%= booking.user.email %></p>
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <h5 class="fw-bold">Guests</h5>
+          <p><i class="fa-solid fa-users me-1"></i> <%= booking.guests %> Guest(s)</p>
+        </div>
+      </div>
+
+      <!-- Listing Info -->
+      <div class="row mb-4">
+        <div class="col-md-6 mb-3">
+          <h5 class="fw-bold">Listing</h5>
+          <p><i class="fa-solid fa-building me-1"></i> <%= booking.listing.title %></p>
+        </div>
+        <div class="col-md-6 mb-3">
+          <h5 class="fw-bold">Location</h5>
+          <p><i class="fa-solid fa-location-dot me-1"></i> <%= booking.listing.location %></p>
+        </div>
+      </div>
+
+      <!-- Dates -->
+      <div class="row mb-4">
+        <div class="col-md-6 mb-3">
+          <h5 class="fw-bold">Check-in</h5>
+          <p><i class="fa-solid fa-calendar-check me-1"></i> <%= booking.checkin.toDateString() %></p>
+        </div>
+        <div class="col-md-6 mb-3">
+          <h5 class="fw-bold">Check-out</h5>
+          <p><i class="fa-solid fa-calendar-day me-1"></i> <%= booking.checkout.toDateString() %></p>
+        </div>
+      </div>
+
+      <!-- Payment -->
+      <div class="row mb-4">
+        <div class="col-md-6 mb-3">
+          <h5 class="fw-bold">Total Paid</h5>
+          <p><i class="fa-solid fa-indian-rupee-sign me-1"></i> <%= booking.totalPrice %></p>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="d-flex flex-wrap gap-3 mt-4">
+        <a href="/bookings/<%= booking._id %>/invoice" class="btn btn-dark shadow-sm">
+          <i class="fa-solid fa-file-invoice me-2"></i> Download Invoice
+        </a>
+
+        <a href="/listings/<%= booking.listing._id %>" class="btn btn-outline-primary shadow-sm">
+          <i class="fa-solid fa-house-circle-check me-2"></i> View Listing
+        </a>
+
+        <% if (booking.paymentStatus !== "cancelled") { %>
+        <form action="/bookings/<%= booking._id %>?_method=DELETE" method="POST" onsubmit="return confirm('Cancel this booking?')">
+          <button class="btn btn-danger shadow-sm">
+            <i class="fa-solid fa-ban me-1"></i> Cancel Booking (Coming Soon)
+          </button>
+        </form>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,220 @@
+<% layout("layouts/boilerplate") %>
+
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Outfit:wght@600;700&display=swap");
+
+  body {
+    font-family: "Poppins", sans-serif;
+    background: linear-gradient(120deg, #f0f4ff, #e5f8ff);
+    color: #222;
+    margin: 0;
+  }
+
+  .booking-card {
+    background: #ffffff;
+    border-radius: 2rem;
+    padding: 2.5rem 2rem;
+    box-shadow: 0 15px 40px rgba(0, 124, 240, 0.08);
+    animation: fadeSlideIn 0.6s ease-out;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .booking-card:hover {
+    box-shadow: 0 25px 60px rgba(0, 124, 240, 0.12);
+  }
+
+  .gradient-text {
+    font-family: "Outfit", sans-serif;
+    font-weight: 700;
+    background: linear-gradient(90deg, #007cf0, #00dfd8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: clamp(1.6rem, 5vw, 2.4rem);
+    line-height: 1.2;
+  }
+
+  .luxury-input {
+    border: 2px solid #dee2e6;
+    border-radius: 1.2rem;
+    background-color: #f9f9f9;
+    transition: 0.25s ease;
+    font-size: 1rem;
+    padding: 0.7rem 1.2rem;
+  }
+
+  .luxury-input:focus {
+    border-color: #00bcd4;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(0, 188, 212, 0.2);
+  }
+
+  label {
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 0.5rem;
+    color: #555;
+  }
+
+  .btn-gradient {
+  background: linear-gradient(135deg, #007cf0, #00dfd8);
+  color: white;
+  font-weight: 600;
+  font-size: clamp(0.95rem, 2.5vw, 1.1rem);
+  padding: 0.75rem 2rem;
+  border: none;
+  border-radius: 999px;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 6px 16px rgba(0, 124, 240, 0.3);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  text-align: center;
+  width: 100%;
+  max-width: 100%;
+}
+
+.btn-gradient:hover {
+  background: linear-gradient(135deg, #0062d1, #00c4bd);
+  transform: scale(1.02) translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0, 124, 240, 0.4);
+}
+
+
+  /* Keyframes for fade slide animation */
+  @keyframes fadeSlideIn {
+    from {
+      transform: translateY(40px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .booking-card {
+      padding: 2rem 1.5rem;
+      border-radius: 1.5rem;
+    }
+
+    .gradient-text {
+      font-size: 2rem;
+    }
+
+    .btn-gradient {
+      width: 100%;
+      font-size: 1rem;
+    }
+
+    .luxury-input {
+      font-size: 0.95rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .booking-card {
+      padding: 1.6rem 1.2rem;
+      border-radius: 1.2rem;
+    }
+
+    .gradient-text {
+      font-size: 1.8rem;
+    }
+
+    .luxury-input {
+      font-size: 0.95rem;
+      padding: 0.6rem 1rem;
+    }
+
+    .btn-gradient {
+      font-size: 0.95rem;
+      padding: 0.7rem 1.5rem;
+    }
+  }
+
+  @media (max-width: 360px) {
+    .booking-card {
+      padding: 1.3rem 1rem;
+    }
+
+    .gradient-text {
+      font-size: 1.6rem;
+    }
+
+    .luxury-input {
+      font-size: 0.9rem;
+    }
+
+    .btn-gradient {
+      font-size: 0.9rem;
+    }
+  }
+
+  @media (min-width: 768px) {
+  .btn-gradient {
+    width: auto;
+    min-width: 240px;
+  }
+}
+
+</style>
+
+
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-6 col-md-8">
+      <div class="booking-card animate__animated animate__fadeInUp">
+        <h2 class="gradient-text text-center mb-4">
+          <i class="fa-solid fa-calendar-check me-2"></i> Book <%= listing.title %>
+        </h2>
+
+        <form action="/bookings/<%= listing._id %>" method="POST" novalidate>
+          <div class="mb-4">
+            <label for="checkin">Check-in</label>
+            <input
+              type="date"
+              id="checkin"
+              name="checkin"
+              class="form-control form-control-lg luxury-input"
+              required
+            />
+          </div>
+
+          <div class="mb-4">
+            <label for="checkout">Check-out</label>
+            <input
+              type="date"
+              id="checkout"
+              name="checkout"
+              class="form-control form-control-lg luxury-input"
+              required
+            />
+          </div>
+
+          <div class="mb-4">
+            <label for="guests">Number of Guests</label>
+            <input
+              type="number"
+              id="guests"
+              name="guests"
+              min="1"
+              max="10"
+              class="form-control form-control-lg luxury-input"
+              placeholder="e.g. 2"
+              required
+            />
+          </div>
+
+          <div class="d-grid mt-4">
+            <button type="submit" class="btn btn-gradient rounded-pill shadow-sm">
+              Confirm Booking
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

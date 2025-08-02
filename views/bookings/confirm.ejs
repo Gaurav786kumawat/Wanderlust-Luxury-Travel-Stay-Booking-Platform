@@ -1,0 +1,280 @@
+<% layout("layouts/boilerplate") %>
+
+ <%
+  const bookingAmount = booking?.listing?.price ? booking.listing.price * 100 : 0; // 💥 paise me bhejna hai Razorpay ko
+  const readableAmount = booking?.listing?.price ? booking.listing.price.toLocaleString("en-IN") : "0";
+%>
+
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700&family=Poppins:wght@400;500&display=swap");
+
+  body {
+    font-family: "Poppins", sans-serif;
+    background: linear-gradient(to right, #f9f9f9, #f3f5fa);
+    color: #222;
+    margin: 0;
+    padding: 0;
+  }
+
+  .confirmation-card {
+    background: #fff;
+    border-radius: 2rem;
+    padding: 2.8rem 2.2rem;
+    max-width: 600px;
+    margin: auto;
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
+    animation: fadeSlide 0.6s ease-in-out;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .text-gradient {
+    font-family: "Outfit", sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    background: linear-gradient(to right, #ff416c, #ff4b2b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: 0.5px;
+  }
+
+  .booking-status {
+    font-size: 0.95rem;
+    font-weight: 600;
+    padding: 0.4rem 1.2rem;
+    border-radius: 999px;
+    display: inline-block;
+    background: #f3f4f7;
+    color: #444;
+    margin-top: 0.2rem;
+  }
+
+  .confirmation-label {
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-top: 1.6rem;
+    color: #555;
+  }
+
+  .confirmation-value {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #111;
+    word-break: break-word;
+  }
+
+  .btn-gradient {
+    padding: 0.85rem 2.5rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 50px;
+    background: linear-gradient(135deg, #ff416c, #ff4b2b);
+    color: #fff;
+    transition: 0.3s ease;
+    box-shadow: 0 8px 25px rgba(255, 65, 108, 0.4);
+  }
+
+  .btn-gradient:hover {
+    background: linear-gradient(135deg, #ff4b2b, #ff416c);
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 12px 30px rgba(255, 65, 108, 0.45);
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid #eee;
+    margin: 2rem 0;
+  }
+
+  @keyframes fadeSlide {
+    from {
+      transform: translateY(40px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  /* Responsive Styles */
+  @media (max-width: 768px) {
+    .confirmation-card {
+      padding: 2rem 1.4rem;
+      border-radius: 1.5rem;
+    }
+
+    .text-gradient {
+      font-size: 2rem;
+    }
+
+    .confirmation-value {
+      font-size: 1.1rem;
+    }
+
+    .btn-gradient {
+      width: 100%;
+      font-size: 1.05rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .confirmation-card {
+      padding: 1.5rem 1rem;
+      border-radius: 1.2rem;
+    }
+
+    .text-gradient {
+      font-size: 1.7rem;
+    }
+
+    .booking-status {
+      font-size: 0.85rem;
+    }
+
+    .confirmation-label {
+      font-size: 1rem;
+    }
+
+    .confirmation-value {
+      font-size: 1.05rem;
+    }
+
+    .btn-gradient {
+      font-size: 1rem;
+      padding: 0.75rem 2rem;
+    }
+  }
+
+  @media (max-width: 360px) {
+    .confirmation-card {
+      padding: 1.2rem 0.9rem;
+    }
+
+    .text-gradient {
+      font-size: 1.5rem;
+    }
+
+    .btn-gradient {
+      font-size: 0.95rem;
+      padding: 0.7rem 1.8rem;
+    }
+
+    .confirmation-label,
+    .confirmation-value {
+      font-size: 0.95rem;
+    }
+  }
+</style>
+
+
+
+<div class="container py-5">
+  <div class="confirmation-card mx-auto" style="max-width: 600px">
+    <div class="text-center">
+      <h2 class="text-gradient mb-3">Booking Confirmation </h2>
+      <span class="booking-status"
+        >Confirmation • ID: <%= booking._id.toString().slice(-6) %></span
+      >
+    </div>
+
+    <hr class="my-4" />
+
+    <p class="confirmation-label">🏨 Property:</p>
+    <p class="confirmation-value">
+      <strong><%= booking.listing.title %></strong>
+    </p>
+
+    <p class="confirmation-label">📅 Check-in:</p>
+    <p class="confirmation-value"><%= booking.checkin.toDateString() %></p>
+
+    <p class="confirmation-label">📅 Check-out:</p>
+    <p class="confirmation-value"><%= booking.checkout.toDateString() %></p>
+
+    <p class="confirmation-label">👥 Guests:</p>
+    <p class="confirmation-value"><%= booking.guests %> guest(s)</p>
+
+    <div class="text-center mt-5">
+      <button id="payBtn" class="btn btn-gradient shadow-sm">
+        <i class="fa-solid fa-credit-card me-2"></i> Pay ₹<%= readableAmount %>
+      </button>
+    </div>
+  </div>
+</div>
+<!-- Razorpay Script -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<% const jsVars = ` const bookingAmount = ${JSON.stringify(bookingAmount)};
+const bookingId = ${JSON.stringify(booking._id.toString())}; `; %>
+<script>
+  <%- jsVars %>
+</script>
+
+<!-- ✅ Inject Razorpay Key and Validate -->
+<script>
+  const RAZORPAY_KEY = "<%= razorpayKey %>";
+  if (!RAZORPAY_KEY) {
+    alert("❌ Razorpay key not found. Payment cannot proceed.");
+  }
+
+  document
+    .getElementById("payBtn")
+    .addEventListener("click", async function () {
+      try {
+        const response = await fetch("/payments/create-order", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            amount: bookingAmount,
+            bookingId: bookingId,
+          }),
+        });
+
+        const order = await response.json();
+
+        const options = {
+          key: RAZORPAY_KEY, // ✅ Now using injected key
+          amount: order.amount,
+          currency: "INR",
+          name: "Wanderlust",
+          description: "Booking Payment",
+          order_id: order.id,
+
+          handler: async function (response) {
+            try {
+              const verifyRes = await fetch("/payments/verify", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  razorpay_payment_id: response.razorpay_payment_id,
+                  razorpay_order_id: response.razorpay_order_id,
+                  bookingId: bookingId,
+                }),
+              });
+
+              const result = await verifyRes.json();
+              if (result.success) {
+                window.location.href = `/bookings/${bookingId}/thankyou`;
+              } else {
+                alert("❌ Payment verification failed.");
+              }
+            } catch (err) {
+              alert("❌ Verification error: " + err.message);
+            }
+          },
+          prefill: {
+            name: "<%= booking.user.username %>",
+            email: "<%= booking.user.email %>",
+          },
+          theme: {
+            color: "#007cf0",
+          },
+        };
+
+        const rzp = new Razorpay(options);
+        rzp.open();
+      } catch (err) {
+        alert("⚠️ Payment initiation failed: " + err.message);
+      }
+    });
+</script>

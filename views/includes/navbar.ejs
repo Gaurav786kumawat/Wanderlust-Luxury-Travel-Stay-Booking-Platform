@@ -1,0 +1,577 @@
+<!-- Optimized Wanderlust Navbar with Left Slide Sidebar on Mobile -->
+<link
+  href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+  rel="stylesheet"
+/>
+<link
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  rel="stylesheet"
+/>
+<link rel="stylesheet" href="/public/css/style.css" />
+<style>
+  /* IMPORTED FONTS & FRAMEWORKS */
+  @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+
+  body {
+    font-family: "Poppins", sans-serif;
+  }
+
+  /* === SIDEBAR STYLES === */
+  .mobile-sidebar {
+    position: fixed;
+    top: 0;
+    left: -270px;
+    width: 250px;
+    height: 100%;
+    background-color: #fff;
+    z-index: 1055;
+    transition: all 0.3s ease;
+    box-shadow: 2px 0 15px rgba(0, 0, 0, 0.15);
+    padding: 1rem 1.2rem;
+    overflow-y: auto;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+  }
+
+  .mobile-sidebar.show {
+    left: 0;
+  }
+
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 1050;
+    display: none;
+  }
+
+  .overlay.show {
+    display: block;
+  }
+
+  @media (max-width: 991.98px) {
+    #navbarNav,
+    .navbar-toggler-icon {
+      display: none !important;
+    }
+  }
+
+  /* === SEARCH INPUT STYLING === */
+  #searchInputDesktop,
+  #searchInputMobile {
+    padding: 0.6rem 1rem;
+  }
+
+  #suggestionBoxDesktop li,
+  #suggestionBoxMobile li {
+    cursor: pointer;
+  }
+
+  #suggestionBoxDesktop li:hover,
+  #suggestionBoxMobile li:hover {
+    background-color: #f8f9fa;
+  }
+
+  @media (max-width: 767.98px) {
+    #suggestionBoxMobile {
+      position: static;
+    }
+  }
+
+  /* === SIDEBAR SEARCH BAR === */
+  #mobileSidebar .input-group {
+    width: 100%;
+  }
+
+  #mobileSidebar .input-group input[type="search"] {
+    font-size: 1rem;
+    padding: 0.6rem 1rem;
+    border: 2px solid #ddd;
+    border-right: none;
+    border-radius: 50px 0 0 50px;
+    background-color: #f9f9f9;
+    transition: 0.2s ease-in-out;
+  }
+
+  #mobileSidebar .input-group input[type="search"]:focus {
+    outline: none;
+    border-color: #007cf0;
+    background-color: #fff;
+    box-shadow: 0 0 8px rgba(0, 124, 240, 0.3);
+  }
+
+  #mobileSidebar .input-group button {
+    border: 2px solid #007cf0;
+    border-left: none;
+    border-radius: 0 50px 50px 0;
+    background-color: #007cf0;
+    color: white;
+    padding: 0.6rem 1rem;
+    font-size: 1rem;
+    transition: 0.2s ease;
+  }
+
+  #mobileSidebar .input-group button:hover {
+    background-color: #005dc1;
+  }
+
+  @media (max-width: 420px) {
+    #mobileSidebar .input-group input[type="search"] {
+      font-size: 0.95rem;
+      padding: 0.5rem 0.9rem;
+    }
+
+    #mobileSidebar .input-group button {
+      font-size: 0.95rem;
+      padding: 0.5rem 0.9rem;
+    }
+  }
+
+  @media (max-width: 350px) {
+    #mobileSidebar .input-group input[type="search"] {
+      font-size: 0.9rem;
+      padding: 0.4rem 0.8rem;
+    }
+
+    #mobileSidebar .input-group button {
+      font-size: 0.9rem;
+      padding: 0.4rem 0.8rem;
+    }
+  }
+
+  /* === SIDEBAR NAV LINKS === */
+  #mobileSidebar .nav-link {
+    font-weight: 500;
+    margin: 6px 0;
+    position: relative;
+    color: #333 !important;
+    transition: 0.3s ease;
+    animation: fadeInUp 0.6s ease-in-out;
+    display: inline-block;
+  }
+
+  #mobileSidebar .nav-link:hover {
+    color: #007bff !important;
+    transform: translateY(-2px);
+  }
+
+  #mobileSidebar .nav-link::after {
+    content: "";
+    position: absolute;
+    width: 0%;
+    height: 2px;
+    bottom: -2px;
+    left: 0;
+    background-color: #007bff;
+    transition: width 0.3s ease-in-out;
+  }
+
+  #mobileSidebar .nav-link:hover::after {
+    width: 100%;
+  }
+
+  #mobileSidebar .text-warning {
+    color: #ffa500 !important;
+  }
+
+  #mobileSidebar .text-success {
+    color: #28a745 !important;
+  }
+
+  #mobileSidebar .text-danger {
+    color: #dc3545 !important;
+  }
+
+  #mobileSidebar .text-primary {
+    color: #007bff !important;
+  }
+
+  /* === ANIMATIONS === */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes bounce {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-5px);
+    }
+  }
+
+  @keyframes fadeInLeft {
+    from {
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slideDown {
+    from {
+      transform: translateY(-20px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+</style>
+
+<!-- NAVBAR -->
+<nav
+  class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm border-bottom"
+>
+  <div class="container-fluid px-4">
+    <!-- Logo -->
+    <a
+      class="navbar-brand fs-4 d-flex align-items-center gap-2"
+      href="/listings"
+    >
+      <i class="fa-regular fa-compass text-danger fs-3"></i>
+      <span class="fw-bold">Wanderlust</span>
+    </a>
+
+    <!-- Mobile Toggler -->
+    <button class="navbar-toggler border-0" type="button" id="menuToggleBtn">
+      <i class="fa-solid fa-bars fs-4"></i>
+    </button>
+
+    <!-- Normal Collapse (Desktop) -->
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <!-- Left Links -->
+      <ul class="navbar-nav me-auto mb-2 mb-md-0">
+        <li class="nav-item">
+          <a class="nav-link" href="/listings"
+            ><i class="fa-solid fa-globe me-1"></i> Explore</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/contact"
+            ><i class="fa-solid fa-message me-1"></i> Contact</a
+          >
+        </li>
+      </ul>
+
+      <!-- ✅ Desktop Search Bar (centered in navbar) -->
+      <div
+        class="d-none d-lg-block position-relative mx-auto"
+        style="max-width: 500px"
+      >
+        <form
+          id="searchFormDesktop"
+          class="d-flex"
+          action="/listings"
+          method="get"
+        >
+          <input
+            type="search"
+            id="searchInputDesktop"
+            name="search"
+            class="form-control border-end-0 rounded-start-pill"
+            placeholder="Search rooms, villas, hotels..."
+            autocomplete="off"
+          />
+          <button
+            class="btn btn-outline-primary rounded-end-pill border-start-0"
+            type="submit"
+          >
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </button>
+        </form>
+        <ul
+          id="suggestionBoxDesktop"
+          class="list-group position-absolute w-100 shadow-sm mt-1"
+          style="z-index: 1050; display: none; border-radius: 0 0 1rem 1rem"
+        ></ul>
+      </div>
+
+      <!-- Right Links -->
+      <ul class="navbar-nav ms-auto align-items-center gap-2 mt-3 mt-md-0">
+        <li class="nav-item">
+          <a class="nav-link text-success fw-semibold" href="/listings/new">
+            <i class="fa-solid fa-house-circle-check me-1"></i> Wanderlust your
+            home
+          </a>
+        </li>
+
+        <% if (currUser) { %>
+        <!-- ✅ My Bookings for Logged-In Users -->
+        <li class="nav-item">
+          <a class="nav-link text-info fw-bold" href="/bookings/my">
+            <i class="fa-solid fa-calendar-check me-1"></i> My Bookings
+          </a>
+        </li>
+
+        <% if (currUser.email === "gaurav822kumawat@gmail.com" && currUser) { %>
+        <!-- ✅ Admin Options -->
+        <li class="nav-item">
+          <a class="nav-link text-warning fw-bold" href="/admin/bookings">
+            <i class="fa-solid fa-table-list me-1"></i> Admin Bookings
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-warning fw-bold" href="/admin/contacts">
+            <i class="fa-solid fa-envelope-open-text me-1"></i> Admin Contacts
+          </a>
+        </li>
+        <% } %>
+
+        <!-- Username Display -->
+        <li class="nav-item">
+          <span class="nav-link disabled">
+            <i class="fa-solid fa-user"></i> <%= currUser.username %>
+          </span>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-danger" href="/logout"><b>Logout</b></a>
+        </li>
+
+        <% } else { %>
+        <!-- Guest Links -->
+        <li class="nav-item">
+          <a class="nav-link text-primary" href="/login"><b>Login</b></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-success" href="/signup"><b>Signup</b></a>
+        </li>
+        <% } %>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Sidebar + Backdrop -->
+<div id="mobileSidebar" class="mobile-sidebar">
+  <button class="btn-close float-end mb-2" id="closeSidebarBtn"></button>
+
+  <!-- ✅ Sidebar Search Bar (Perfect One-Line Layout) -->
+  <div class="w-100 mb-3">
+    <div class="input-group">
+      <input
+        type="search"
+        id="searchInputMobile"
+        name="search"
+        class="form-control rounded-start-pill"
+        placeholder="Search rooms, villas..."
+        autocomplete="off"
+        style="border-right: none"
+        form="searchFormMobile"
+      />
+      <button
+        type="submit"
+        class="btn btn-outline-primary rounded-end-pill"
+        form="searchFormMobile"
+      >
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- ✅ Hidden Form -->
+  <form id="searchFormMobile" action="/listings" method="get"></form>
+
+  <!-- ✅ Suggestions -->
+  <ul
+    id="suggestionBoxMobile"
+    class="list-group mt-1"
+    style="display: none; border-radius: 0 0 1rem 1rem"
+  ></ul>
+
+  <!-- ✅ Navigation Links -->
+  <ul class="list-unstyled mt-4">
+    <li>
+      <a href="/listings" class="nav-link py-2"
+        ><i class="fa-solid fa-globe me-2"></i> Explore</a
+      >
+    </li>
+    <li>
+      <a href="/contact" class="nav-link py-2"
+        ><i class="fa-solid fa-message me-2"></i> Contact</a
+      >
+    </li>
+    <li>
+      <a href="/listings/new" class="nav-link py-2 text-success"
+        ><i class="fa-solid fa-house-circle-check me-2"></i> Wanderlust Your
+        Home</a
+      >
+    </li>
+
+    <% if (currUser) { %>
+    <li>
+      <a href="/bookings/my" class="nav-link py-2 text-info fw-bold">
+        <i class="fa-solid fa-calendar-check me-2"></i> My Bookings
+      </a>
+    </li>
+    <% if (currUser.email === "gaurav822kumawat@gmail.com" && currUser) { %>
+    <li>
+      <a href="/admin/bookings" class="nav-link py-2 text-warning">
+        <i class="fa-solid fa-table-list me-2"></i> Admin Bookings
+      </a>
+    </li>
+    <li>
+      <a href="/admin/contacts" class="nav-link py-2 text-warning">
+        <i class="fa-solid fa-envelope-open-text me-2"></i> Admin Contacts
+      </a>
+    </li>
+    <% } %> <% } %> <% if (currUser) { %>
+    <li class="mt-3 border-top pt-3 text-muted">
+      <i class="fa-solid fa-user me-2"></i><%= currUser.username %>
+    </li>
+    <li>
+      <a href="/logout" class="nav-link py-2 text-danger fw-bold">Logout</a>
+    </li>
+    <% } else { %>
+    <li class="mt-3 border-top pt-3">
+      <a href="/login" class="nav-link py-2 text-primary fw-bold">Login</a>
+    </li>
+    <li>
+      <a href="/signup" class="nav-link py-2 text-success fw-bold">Signup</a>
+    </li>
+    <% } %>
+  </ul>
+</div>
+
+<div id="overlay" class="overlay"></div>
+
+<script>
+  const sidebar = document.getElementById("mobileSidebar");
+  const overlay = document.getElementById("overlay");
+  const openBtn = document.getElementById("menuToggleBtn");
+  const closeBtn = document.getElementById("closeSidebarBtn");
+
+  openBtn.addEventListener("click", () => {
+    sidebar.classList.add("show");
+    overlay.classList.add("show");
+  });
+
+  closeBtn.addEventListener("click", () => {
+    sidebar.classList.remove("show");
+    overlay.classList.remove("show");
+  });
+
+  overlay.addEventListener("click", () => {
+    sidebar.classList.remove("show");
+    overlay.classList.remove("show");
+  });
+</script>
+
+<script>
+  const searchInputDesktop = document.getElementById("searchInputDesktop");
+  const suggestionBoxDesktop = document.getElementById("suggestionBoxDesktop");
+
+  searchInputDesktop.addEventListener("input", async () => {
+    const query = searchInputDesktop.value.trim();
+    if (!query) {
+      suggestionBoxDesktop.style.display = "none";
+      suggestionBoxDesktop.innerHTML = "";
+      return;
+    }
+
+    try {
+      const res = await fetch(`/listings/search-suggestions?q=${query}`);
+      const data = await res.json();
+
+      suggestionBoxDesktop.innerHTML = "";
+      if (data.length > 0) {
+        data.forEach((item) => {
+          const li = document.createElement("li");
+          li.textContent = item.title;
+          li.classList.add("list-group-item");
+
+          li.addEventListener("click", () => {
+            searchInputDesktop.value = item.title;
+            suggestionBoxDesktop.innerHTML = "";
+            suggestionBoxDesktop.style.display = "none";
+            searchInputDesktop.form.submit();
+          });
+
+          suggestionBoxDesktop.appendChild(li);
+        });
+        suggestionBoxDesktop.style.display = "block";
+      } else {
+        suggestionBoxDesktop.style.display = "none";
+      }
+    } catch (err) {
+      console.error("Desktop Suggestion Error:", err);
+    }
+  });
+
+  document.addEventListener("click", (e) => {
+    if (
+      !searchInputDesktop.contains(e.target) &&
+      !suggestionBoxDesktop.contains(e.target)
+    ) {
+      suggestionBoxDesktop.style.display = "none";
+    }
+  });
+</script>
+
+<script>
+  const searchInputMobile = document.getElementById("searchInputMobile");
+  const suggestionBoxMobile = document.getElementById("suggestionBoxMobile");
+
+  searchInputMobile.addEventListener("input", async () => {
+    const query = searchInputMobile.value.trim();
+    if (!query) {
+      suggestionBoxMobile.style.display = "none";
+      suggestionBoxMobile.innerHTML = "";
+      return;
+    }
+
+    try {
+      const res = await fetch(`/listings/search-suggestions?q=${query}`);
+      const data = await res.json();
+
+      suggestionBoxMobile.innerHTML = "";
+      if (data.length > 0) {
+        data.forEach((item) => {
+          const li = document.createElement("li");
+          li.textContent = item.title;
+          li.classList.add("list-group-item");
+
+          li.addEventListener("click", () => {
+            searchInputMobile.value = item.title;
+            suggestionBoxMobile.innerHTML = "";
+            suggestionBoxMobile.style.display = "none";
+            searchInputMobile.form.submit();
+          });
+
+          suggestionBoxMobile.appendChild(li);
+        });
+        suggestionBoxMobile.style.display = "block";
+      } else {
+        suggestionBoxMobile.style.display = "none";
+      }
+    } catch (err) {
+      console.error("Mobile Suggestion Error:", err);
+    }
+  });
+
+  document.addEventListener("click", (e) => {
+    if (
+      !searchInputMobile.contains(e.target) &&
+      !suggestionBoxMobile.contains(e.target)
+    ) {
+      suggestionBoxMobile.style.display = "none";
+    }
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
